@@ -71,6 +71,9 @@ add_definitions(
 
 if(WIN32)
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+    set(CMAKE_CXX_FLAGS "-fpermissive -Wno-conversion-null -Wno-unused-variable -Wno-unused-value -Wno-deprecated-declarations")
+    add_compile_options(-Wno-unused-variable -Wno-unused-value -Wdeprecated-declarations)
+    set(CMAKE_CXX_EXTENSIONS ON)
 endif()
 
 if(COMPILE_CONNECTIVITY)
@@ -263,6 +266,8 @@ endforeach(SD_API_VER)
 # Additional special linkage libraries
 foreach(SD_API_VER ${SD_API_VERS})
     if(WIN32)
+        target_link_libraries(${NRF_BLE_DRIVER_${SD_API_VER}_STATIC_LIB} PRIVATE "wsock32")
+        target_link_libraries(${NRF_BLE_DRIVER_${SD_API_VER}_SHARED_LIB} PRIVATE "wsock32")
     elseif(APPLE)
         target_link_libraries(${NRF_BLE_DRIVER_${SD_API_VER}_STATIC_LIB} PRIVATE "-framework CoreFoundation" "-framework IOKit")
         target_link_libraries(${NRF_BLE_DRIVER_${SD_API_VER}_SHARED_LIB} PRIVATE "-framework CoreFoundation" "-framework IOKit")
